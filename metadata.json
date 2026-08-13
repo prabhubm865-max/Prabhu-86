@@ -1,0 +1,8 @@
+{
+  "name": "Remix ಕರ್ನಾಟಕ ಪಬ್ಲಿಕ್ ಸ್ಕೂಲ್ ಕಾಕೋಳ",
+  "description": "ಆಟದ ಮೂಲಕ ಕನ್ನಡ ಕಲಿಯೋಣ – ಕಲಿಯೋಣ, ಆಡೋಣ, ಗೆಲ್ಲೋಣ! - KPS Kakol Kannada Learning App",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
