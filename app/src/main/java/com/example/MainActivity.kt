@@ -185,16 +185,6 @@ fun MainContent(
                                     progressManager.addTeacherNote(note)
                                     audioPlayer.playSuccessSound()
                                 },
-                                onAddTeacherResource = { title, category, content, teacherName ->
-                                    progressManager.addTeacherResource(title, category, content, teacherName)
-                                    audioPlayer.playSuccessSound()
-                                },
-                                onDeleteTeacherResource = { id ->
-                                    progressManager.deleteTeacherResource(id)
-                                },
-                                onSpeakRequested = { text ->
-                                    audioPlayer.speak(text)
-                                },
                                 onResetProgress = {
                                     progressManager.resetProgress()
                                 }

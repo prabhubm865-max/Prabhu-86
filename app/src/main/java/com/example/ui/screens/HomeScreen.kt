@@ -243,84 +243,6 @@ fun HomeScreen(
             )
         }
 
-        // Recent Teacher Announcements & Homework Section
-        if (progressState.teacherResources.isNotEmpty()) {
-            item {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "📢 ಶಾಲಾ ಶಿಕ್ಷಕರ ಇತ್ತೀಚಿನ ಮನೆಗೆಲಸ & ಸೂಚನೆಗಳು",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = VibrantTextDark
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    val latestRes = progressState.teacherResources.first()
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(1.dp, VibrantPurple.copy(alpha = 0.3f), RoundedCornerShape(20.dp)),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFAF5FF)),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .background(VibrantPurple.copy(alpha = 0.15f))
-                                        .padding(horizontal = 8.dp, vertical = 3.dp)
-                                ) {
-                                    Text(
-                                        text = latestRes.category,
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = VibrantPurple
-                                    )
-                                }
-
-                                Text(
-                                    text = latestRes.date,
-                                    fontSize = 11.sp,
-                                    color = VibrantTextMuted
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(6.dp))
-
-                            Text(
-                                text = latestRes.title,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
-                                color = VibrantTextDark
-                            )
-
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            Text(
-                                text = "✍️ ${latestRes.teacherName}: ${latestRes.content}",
-                                fontSize = 13.sp,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                lineHeight = 18.sp
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
         // Stats Overview Title
         item {
             Text(
@@ -402,8 +324,6 @@ fun HomeScreen(
                 LearningLevelId.LEVEL_1 -> VibrantEmerald
                 LearningLevelId.LEVEL_2 -> VibrantAmber
                 LearningLevelId.LEVEL_3 -> VibrantRose
-                LearningLevelId.KANNADA_GRAMMAR -> VibrantPurple
-                LearningLevelId.ENGLISH_BILINGUAL -> VibrantBlue
             }
 
             Card(

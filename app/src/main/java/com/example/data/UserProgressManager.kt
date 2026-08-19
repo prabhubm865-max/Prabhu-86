@@ -20,8 +20,7 @@ data class UserProgressState(
     val totalQuizzesAttempted: Int = 0,
     val totalCorrectAnswers: Int = 0,
     val studentName: String = "ವಿದ್ಯಾರ್ಥಿ (Student)",
-    val notes: List<StudentNote> = emptyList(),
-    val teacherResources: List<TeacherResource> = emptyList()
+    val notes: List<StudentNote> = emptyList()
 )
 
 class UserProgressManager(context: Context) {
@@ -71,52 +70,6 @@ class UserProgressManager(context: Context) {
             )
         }
 
-        val resourcesJsonStr = prefs.getString("teacher_resources", "[]") ?: "[]"
-        val resourcesList = mutableListOf<TeacherResource>()
-        try {
-            val jsonArray = JSONArray(resourcesJsonStr)
-            for (i in 0 until jsonArray.length()) {
-                val obj = jsonArray.getJSONObject(i)
-                resourcesList.add(
-                    TeacherResource(
-                        id = obj.getString("id"),
-                        title = obj.getString("title"),
-                        category = obj.optString("category", "ಮನೆಗೆಲಸ (Homework)"),
-                        content = obj.getString("content"),
-                        date = obj.getString("date"),
-                        teacherName = obj.optString("teacherName", "ಶಿಕ್ಷಕರು (KPS Kakol)"),
-                        linkUrl = obj.optString("linkUrl", "")
-                    )
-                )
-            }
-        } catch (e: Exception) {
-            // ignore
-        }
-
-        if (resourcesList.isEmpty()) {
-            val dateToday = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-            resourcesList.add(
-                TeacherResource(
-                    id = "tr1",
-                    title = "ಅಕ್ಷರ ಅಭ್ಯಾಸ ಮತ್ತು ದಿನನಿತ್ಯದ ಬರವಣಿಗೆ",
-                    category = "ಮನೆಗೆಲಸ (Homework)",
-                    content = "ದಿನವೂ ೫ ಬಾರಿ ಸ್ವರಗಳು (ಅ-ಅಃ) ಹಾಗೂ ಕ-ವರ್ಗದ ವ್ಯಂಜನಗಳನ್ನು ನೋಟ್‌ಬುಕ್‌ನಲ್ಲಿ ಬರೆದು ಅಭ್ಯಾಸ ಮಾಡಿ.",
-                    date = dateToday,
-                    teacherName = "ಶ್ರೀಮತಿ ಶಾರದಮ್ಮ (KPS Kakol)"
-                )
-            )
-            resourcesList.add(
-                TeacherResource(
-                    id = "tr2",
-                    title = "ದ್ವಿಭಾಷಾ ಇಂಗ್ಲಿಷ್ ಸಂಭಾಷಣೆ - ದಿನ ಬಳಕೆಯ ವಾಕ್ಯಗಳು",
-                    category = "ಪಾಠ ಟಿಪ್ಪಣಿ (Lesson Notes)",
-                    content = "ಮನೆಯಲ್ಲಿ ಪೋಷಕರೊಂದಿಗೆ ೫ ಸರಳ ಇಂಗ್ಲಿಷ್ ವಾಕ್ಯಗಳನ್ನು ಬಳಸಿ ಮಾತನಾಡಿ (Good morning, Open your book, Thank you, How are you?).",
-                    date = dateToday,
-                    teacherName = "ಪ್ರಭು ಬಿ.ಎಮ್. (KPS Kakol)"
-                )
-            )
-        }
-
         return UserProgressState(
             starsEarned = stars,
             completedTopics = completedTopics,
@@ -126,8 +79,7 @@ class UserProgressManager(context: Context) {
             totalQuizzesAttempted = quizzes,
             totalCorrectAnswers = correct,
             studentName = name,
-            notes = notesList,
-            teacherResources = resourcesList
+            notes = notesList
         )
     }
 
@@ -219,52 +171,6 @@ class UserProgressManager(context: Context) {
 
         prefs.edit().putString("student_notes", jsonArray.toString()).apply()
         updateState()
-    }
-
-    fun addTeacherResource(
-        title: String,
-        category: String,
-        content: String,
-        teacherName: String = "ಶಿಕ್ಷಕರು (KPS Kakol)",
-        linkUrl: String = ""
-    ) {
-        val currentResources = _progressState.value.teacherResources.toMutableList()
-        val dateStr = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-        val newResource = TeacherResource(
-            id = "res_${System.currentTimeMillis()}",
-            title = title,
-            category = category,
-            content = content,
-            date = dateStr,
-            teacherName = teacherName,
-            linkUrl = linkUrl
-        )
-        currentResources.add(0, newResource)
-
-        saveTeacherResources(currentResources)
-        updateState()
-    }
-
-    fun deleteTeacherResource(id: String) {
-        val filtered = _progressState.value.teacherResources.filter { it.id != id }
-        saveTeacherResources(filtered)
-        updateState()
-    }
-
-    private fun saveTeacherResources(list: List<TeacherResource>) {
-        val jsonArray = JSONArray()
-        list.forEach { res ->
-            val obj = JSONObject()
-            obj.put("id", res.id)
-            obj.put("title", res.title)
-            obj.put("category", res.category)
-            obj.put("content", res.content)
-            obj.put("date", res.date)
-            obj.put("teacherName", res.teacherName)
-            obj.put("linkUrl", res.linkUrl)
-            jsonArray.put(obj)
-        }
-        prefs.edit().putString("teacher_resources", jsonArray.toString()).apply()
     }
 
     fun resetProgress() {

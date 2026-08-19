@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.sp
 import com.example.data.KannadaRepository
 import com.example.data.MatchingPair
 import com.example.data.QuizQuestion
-import com.example.ui.components.ImageQuizComponent
 import com.example.ui.components.MatchingGameComponent
 import com.example.ui.components.SentenceBuilderGame
 import com.example.ui.components.WordBuilderGame
@@ -59,7 +58,7 @@ import com.example.ui.theme.VibrantTextDark
 import com.example.ui.theme.VibrantTextMuted
 
 enum class GameMode {
-    HUB, IMAGE_QUIZ, WORD_BUILDER, SENTENCE_BUILDER, MATCHING, PROVERB_QUIZ, SPEED_QUIZ, BILINGUAL_QUIZ
+    HUB, WORD_BUILDER, SENTENCE_BUILDER, MATCHING, PROVERB_QUIZ, SPEED_QUIZ
 }
 
 @Composable
@@ -97,12 +96,6 @@ fun GamesScreen(
 
         when (activeMode) {
             GameMode.HUB -> GameHubSelector(onSelectGame = { activeMode = it })
-
-            GameMode.IMAGE_QUIZ -> ImageQuizComponent(
-                questions = KannadaRepository.imageQuizQuestions,
-                onStarsAwarded = onStarsAwarded,
-                onSpeakRequested = onSpeakRequested
-            )
 
             GameMode.WORD_BUILDER -> WordBuilderGame(
                 wordItems = KannadaRepository.simpleWords,
@@ -142,21 +135,6 @@ fun GamesScreen(
                 questions = KannadaRepository.quizQuestions,
                 onQuizFinished = { score -> onStarsAwarded(score * 10) }
             )
-
-            GameMode.BILINGUAL_QUIZ -> ImageQuizComponent(
-                questions = KannadaRepository.bilingualQuizQuestions.map { q ->
-                    com.example.data.ImageQuizQuestion(
-                        id = q.id,
-                        imageEmoji = "🇬🇧 🇮🇳",
-                        englishMeaning = q.questionText,
-                        options = q.options,
-                        correctIndex = q.correctIndex,
-                        explanation = q.explanation
-                    )
-                },
-                onStarsAwarded = onStarsAwarded,
-                onSpeakRequested = onSpeakRequested
-            )
         }
     }
 }
@@ -182,16 +160,6 @@ fun GameHubSelector(
                 color = VibrantTextMuted
             )
             Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        item {
-            GameCard(
-                title = "🖼️ ಚಿತ್ರ ರಸಪ್ರಶ್ನೆ (Image Word Quiz)",
-                description = "ಚಿತ್ರ ನೋಡಿ ೪ ಆಯ್ಕೆಗಳಿಂದ ಸರಿಯಾದ ಕನ್ನಡ ಪದ ಗುರುತಿಸಿ",
-                iconEmoji = "🖼️",
-                accentColor = VibrantPurple,
-                onClick = { onSelectGame(GameMode.IMAGE_QUIZ) }
-            )
         }
 
         item {
@@ -241,16 +209,6 @@ fun GameHubSelector(
                 iconEmoji = "⚡",
                 accentColor = VibrantRose,
                 onClick = { onSelectGame(GameMode.SPEED_QUIZ) }
-            )
-        }
-
-        item {
-            GameCard(
-                title = "🇬🇧 🇮🇳 ದ್ವಿಭಾಷಾ ಇಂಗ್ಲಿಷ್ ರಸಪ್ರಶ್ನೆ (Bilingual Quiz)",
-                description = "ಇಂಗ್ಲಿಷ್-ಕನ್ನಡ ವ್ಯಾಕರಣ, Parts of Speech ಮತ್ತು Tenses ಪರೀಕ್ಷಿಸಿ",
-                iconEmoji = "🌐",
-                accentColor = VibrantBlue,
-                onClick = { onSelectGame(GameMode.BILINGUAL_QUIZ) }
             )
         }
 

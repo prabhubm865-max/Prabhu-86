@@ -25,8 +25,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,11 +44,9 @@ import com.example.data.KannadaRepository
 import com.example.data.LearningLevelId
 import com.example.data.Topic
 import com.example.ui.theme.VibrantAmber
-import com.example.ui.theme.VibrantBlue
 import com.example.ui.theme.VibrantBorderLight
 import com.example.ui.theme.VibrantEmerald
 import com.example.ui.theme.VibrantHeaderPink
-import com.example.ui.theme.VibrantPurple
 import com.example.ui.theme.VibrantRose
 import com.example.ui.theme.VibrantTextDark
 import com.example.ui.theme.VibrantTextMuted
@@ -79,10 +77,9 @@ fun LearningLevelsScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Level selector tabs (Scrollable)
-        ScrollableTabRow(
+        // Level selector tabs
+        TabRow(
             selectedTabIndex = selectedLevelId.ordinal,
-            edgePadding = 0.dp,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp)),
@@ -90,19 +87,12 @@ fun LearningLevelsScreen(
         ) {
             KannadaRepository.levels.forEach { level ->
                 val isSelected = level.id == selectedLevelId
-                val shortTitle = when (level.id) {
-                    LearningLevelId.LEVEL_1 -> "🟢 ಮೂಲಭೂತ"
-                    LearningLevelId.LEVEL_2 -> "🟡 ಮಧ್ಯಮ"
-                    LearningLevelId.LEVEL_3 -> "🔴 ಉನ್ನತ"
-                    LearningLevelId.KANNADA_GRAMMAR -> "📖 ವ್ಯಾಕರಣ"
-                    LearningLevelId.ENGLISH_BILINGUAL -> "🇬🇧 ಇಂಗ್ಲಿಷ್"
-                }
                 Tab(
                     selected = isSelected,
                     onClick = { selectedLevelId = level.id },
                     text = {
                         Text(
-                            text = shortTitle,
+                            text = level.title.split(" ").firstOrNull() ?: level.title,
                             fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium,
                             fontSize = 13.sp,
                             color = if (isSelected) VibrantHeaderPink else VibrantTextMuted
@@ -119,8 +109,6 @@ fun LearningLevelsScreen(
             LearningLevelId.LEVEL_1 -> VibrantEmerald
             LearningLevelId.LEVEL_2 -> VibrantAmber
             LearningLevelId.LEVEL_3 -> VibrantRose
-            LearningLevelId.KANNADA_GRAMMAR -> VibrantPurple
-            LearningLevelId.ENGLISH_BILINGUAL -> VibrantBlue
         }
 
         Card(
